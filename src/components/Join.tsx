@@ -1,29 +1,32 @@
 import { useRef } from "react"
-import {joinChat} from "../services/websocket.service"
+import { hostjoin} from "../services/websocket.service"
+import { useNavigate } from "react-router-dom";
+import { generateUuid } from '../utils/generateUuid';
 
-interface joinProps {
-    setChatVisibility: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-
-const Join = ({ setChatVisibility }: joinProps) => {
-
+const Join = () => {
     const userNameRef = useRef<HTMLInputElement>(null);
+    const navigate = useNavigate()
 
-    const handleSubmit = () => {
+
+    const handleSubmit = async () => {
         const username = userNameRef.current?.value;
         
+
         if (username && username.trim()) {
-            localStorage.setItem("chatUsername", username)
-            joinChat(username)
-            setChatVisibility(true)
+            const uuid = generateUuid();
+            await hostjoin(username, uuid)
+            navigate(`configRoom/${uuid}`)
         }
     }
+
+
     return (
-        <div>
+        <div className="w-[100vw] flex items-center flex-col gap-10">
             <h1>Join</h1>
-            <input type="text" ref={userNameRef} placeholder="Mensagem" />
-            <button onClick={() => handleSubmit()}>Enviar</button>
+            <input type="text" ref={userNameRef} placeholder="Mensagem" className="p-3 rounded" />
+            <button onClick={() => handleSubmit()}>
+                Entrar Host
+            </button>
         </div>
     )
 }
