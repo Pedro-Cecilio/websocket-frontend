@@ -12,7 +12,7 @@ function connectBrocker(brocker: string) {
     const stompClient = Stomp.over(socket);
     return stompClient
 }
-async function subscribe(stompClient: Stomp.Client, topico: string, callback:(param:Stomp.Frame)=>void) {
+async function subscribe(stompClient: Stomp.Client, topico: string, callback: (param: Stomp.Frame) => void) {
     stompClient.subscribe(topico, callback, { id: "all" });
 }
 
@@ -33,34 +33,6 @@ const connect = async (stompClient: Stomp.Client) => {
     })
 }
 
-// async function guestjoin(username: string, roomId: string, setCallback) {
-//     const userData: UserData = {
-//         username: username,
-//         host: false
-//     }
-
-//     const stompClient = connectBrocker("connect");
-
-//     stompClient.connect({}, () => {
-//         console.log('Conectado ao servidor STOMP');
-
-//         subscribe(stompClient, `/room/${roomId}`, (JoinData) => {
-//             console.log(JoinData)
-//             console.log('Recebeu uma mensagem do servidor:', JoinData.body);
-
-//             const parsedJoinData = JSON.parse(JoinData.body);
-//             setCallback({
-//                 ...parsedJoinData,
-//             });
-//         })
-
-//         sendMessage(stompClient, JSON.stringify(userData), '/app/room/1');
-//     }, (error: any) => {
-//         console.error('WebSocket connection failed:', error);
-//     });
-// }
-
-
 async function hostjoin(username: string, uuid: string) {
     const userData: UserData = {
         username: username,
@@ -72,7 +44,7 @@ async function hostjoin(username: string, uuid: string) {
     stompClient.connect({}, () => {
         console.log('Conectado ao servidor STOMP');
 
-        subscribe(stompClient, `/room/${uuid}`, (JoinData:Stomp.Frame) => {
+        subscribe(stompClient, `/room/${uuid}`, (JoinData: Stomp.Frame) => {
             console.log('Recebeu uma mensagem do servidor:', JoinData.body);
 
             localStorage.setItem("userData", JoinData.body)
@@ -83,4 +55,32 @@ async function hostjoin(username: string, uuid: string) {
         console.error('WebSocket connection failed:', error);
     });
 }
-export { connectBrocker, subscribe, sendMessage, unsubscribeAll, hostjoin, connect }
+
+async function guestjoin(username: string, roomId: string, setCallback: any) {
+    const userData: UserData = {
+        username: username,
+        host: false
+    }
+
+    const stompClient = connectBrocker("connect");
+
+    stompClient.connect({}, () => {
+        console.log('Conectado ao servidor STOMP');
+
+        subscribe(stompClient, `/room/${roomId}`, (JoinData) => {
+            console.log(JoinData)
+            console.log('Recebeu uma mensagem do servidor:', JoinData.body);
+
+            const parsedJoinData = JSON.parse(JoinData.body);
+            setCallback({
+                ...parsedJoinData,
+            });
+        })
+
+        sendMessage(stompClient, JSON.stringify(userData), `/app/room/${roomId}`);
+    }, (error: any) => {
+        console.error('WebSocket connection failed:', error);
+    });
+}
+
+export { connectBrocker, subscribe, sendMessage, unsubscribeAll, hostjoin, guestjoin, connect }

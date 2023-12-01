@@ -1,5 +1,5 @@
 import { useRef } from "react"
-import { hostjoin} from "../services/websocket.service"
+import { hostjoin } from "../services/websocket.service"
 import { useNavigate } from "react-router-dom";
 import { generateUuid } from '../utils/generateUuid';
 
@@ -7,10 +7,8 @@ const Join = () => {
     const userNameRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate()
 
-
     const handleSubmit = async () => {
         const username = userNameRef.current?.value;
-        
 
         if (username && username.trim()) {
             const uuid = generateUuid();
@@ -18,7 +16,6 @@ const Join = () => {
             navigate(`configRoom/${uuid}`)
         }
     }
-
 
     return (
         <div className="w-[100vw] flex items-center flex-col gap-10">
