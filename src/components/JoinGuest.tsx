@@ -1,28 +1,31 @@
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom";
-import { guestjoin } from "../services/websocket.service";
+import Stomp from 'stompjs';
+import useWebSocket from "../services/websocket.service";
+
 
 const JoinGuest = () => {
     const navigate = useNavigate()
     const { id } = useParams()
+    const {userJoin, subscribeToPing} = useWebSocket()
+    const [stompClient, setStompClient] = useState<Stomp.Client>()
 
     const userNameRef = useRef<HTMLInputElement>(null);
+
     const handleSubmitGuest = () => {
         const username = userNameRef.current?.value;
-
         if (username && username.trim()) {
             localStorage.setItem("guestUsername", username)
-
-            guestjoin(username, id || '', () => { })
-            // guestjoin(username, setGuestData)
+            userJoin(username, id || '', false, setStompClient)
+            subscribeToPing(stompClient!, username, id!)
+            navigate(`/room/${id}`)
         }
-        navigate(`/room/${id}`)
     }
 
     return (
         <div className="w-[100vw] flex items-center flex-col gap-10">
             <h1>Join Guest</h1>
-            <input type="text" ref={userNameRef} placeholder="Mensagem" className="p-3 rounded" />
+            <input type="text" ref={userNameRef} placeholder="Nome" className="p-3 rounded" />
             <button onClick={() => handleSubmitGuest()}>Entrar Guest</button>
         </div>
     )

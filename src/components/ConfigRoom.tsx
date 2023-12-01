@@ -10,13 +10,13 @@ const ConfigRoom = () => {
         // vai ser igual ao id do localstorage
     }, [])
 
-    const [isHost, setIsHost] = useState(true)
+    // const [isHost, setIsHost] = useState(true)
     const [guestLink, setGuestLink] = useState('')
     const { id } = useParams()
     const navigate = useNavigate()
 
     const generateGuestLink = () => {
-        const baseUrl = 'http://127.0.0.1:5173'
+        const baseUrl = 'http://localhost:5173'
         const link = `${baseUrl}/joinGuest/${id}`
         setGuestLink(link)
     }
@@ -40,7 +40,7 @@ const ConfigRoom = () => {
                 <input type="text" placeholder="Nome da sala" />
                 <p>{guestLink}</p>
                 <button onClick={generateGuestLink}>Gerar link</button>
-                <button onClick={e => { navigate(`/room/${id}`) }}>Enviar</button>
+                <button onClick={() => { navigate(`/room/${id}`) }}>Enviar</button>
             </div>
         </div>
     )
