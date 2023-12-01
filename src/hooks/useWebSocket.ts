@@ -1,20 +1,11 @@
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import { useWebSocketContext } from '../contexts/WebSocketContext';
-import { UserData } from  '../contexts/WebSocketContext';
+import { WebSocketResponse } from '../models/webSocketResponse';
+import { UserData } from '../models/UserData';
 
 
-interface WebSocketService {
-    connectBrocker: (brocker: string) => Stomp.Client;
-    subscribe: (stompClient: Stomp.Client, topico: string, callback: (param: Stomp.Frame) => void) => void;
-    sendMessage: (stompClient: Stomp.Client, message: string, topico: string) => void;
-    unsubscribeAll: (stompClient: Stomp.Client) => void;
-    connect: (stompClient: Stomp.Client) => void;
-    userJoin: (username: string, uuid: string, isHost: boolean, callback: (stompClient: Stomp.Client) => void) => void;
-    subscribeToPing: (stompClient: Stomp.Client, username: string, uuid: string) => void;
-}
-
-const useWebSocket = (): WebSocketService => {
+const useWebSocket = (): WebSocketResponse => {
     const { setParticipants } = useWebSocketContext();
 
     const connectBrocker = (brocker: string): Stomp.Client => {
@@ -59,9 +50,9 @@ const useWebSocket = (): WebSocketService => {
             subscribe(stompClient, `/room/${uuid}`, (joinData: Stomp.Frame) => {
                 console.log('Recebeu uma mensagem do servidor:', joinData.body);
 
-                    const user: UserData = JSON.parse(joinData.body);
+                    const users: UserData[] = JSON.parse(joinData.body);
                     
-                    setParticipants((prevParticipants) => [...prevParticipants, user]);
+                    setParticipants(users);
             
             });
             

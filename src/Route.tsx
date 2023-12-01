@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import ConfigRoom from './components/ConfigRoom'
-import Join from './components/Join'
-import Room from './components/Room'
-import JoinGuest from './components/JoinGuest'
+import ConfigRoom from './pages/ConfigRoom'
+import Join from './pages/Join'
+import Room from './pages/Room'
+import JoinGuest from './pages/JoinGuest'
 import { WebSocketProvider } from './contexts/WebSocketContext'
 
 const Router = () => {

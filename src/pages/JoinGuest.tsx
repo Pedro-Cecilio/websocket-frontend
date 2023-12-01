@@ -1,7 +1,7 @@
 import { useRef, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom";
 import Stomp from 'stompjs';
-import useWebSocket from "../services/websocket.service";
+import useWebSocket from "../hooks/useWebSocket";
 
 
 const JoinGuest = () => {

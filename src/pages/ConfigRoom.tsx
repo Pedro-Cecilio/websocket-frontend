@@ -10,7 +10,6 @@ const ConfigRoom = () => {
         // vai ser igual ao id do localstorage
     }, [])
 
-    // const [isHost, setIsHost] = useState(true)
     const [guestLink, setGuestLink] = useState('')
     const { id } = useParams()
     const navigate = useNavigate()
@@ -23,18 +22,6 @@ const ConfigRoom = () => {
 
     return (
         <div>
-            {/* {isHost ?
-                <div className="w-[100vw] flex items-center flex-col gap-10">
-                    <h1>Config Room</h1>
-                    <input type="text" placeholder="Nome da sala" />
-                    <button>Enviar</button>
-                </div>
-
-                :
-
-                <JoinGuest />
-            } */}
-
             <div className="w-[100vw] flex items-center flex-col gap-10">
                 <h1>Config Room</h1>
                 <input type="text" placeholder="Nome da sala" />

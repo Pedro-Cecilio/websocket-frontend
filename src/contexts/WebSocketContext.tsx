@@ -1,21 +1,16 @@
 import React, { createContext, useContext, useState, ReactNode, Dispatch, SetStateAction } from 'react';
-
-export interface UserData {
-    username: string;
-    host: boolean
-    token?: string
-}
+import { UserData } from '../models/UserData';
 
 interface WebSocketContextProps {
     participants: UserData[];
     setParticipants: Dispatch<SetStateAction<UserData[]>>;
 }
 
-const WebSocketContext = createContext<WebSocketContextProps | undefined>(undefined);
-
 interface WebSocketProviderProps {
     children: ReactNode;
 }
+
+const WebSocketContext = createContext<WebSocketContextProps | undefined>(undefined);
 
 export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }) => {
     const [participants, setParticipants] = useState<UserData[]>([]);
@@ -35,8 +30,10 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }
 // eslint-disable-next-line react-refresh/only-export-components
 export const useWebSocketContext = () => {
     const context = useContext(WebSocketContext);
+
     if (!context) {
         throw new Error('useWebSocketContext must be used within a WebSocketProvider');
     }
+    
     return context;
 };

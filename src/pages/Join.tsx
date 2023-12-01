@@ -1,7 +1,7 @@
 import { useRef, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { generateUuid } from '../utils/generateUuid';
-import useWebSocket from "../services/websocket.service";
+import useWebSocket from "../hooks/useWebSocket";
 import Stomp from 'stompjs';
 
 const Join = () => {
