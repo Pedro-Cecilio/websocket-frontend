@@ -1,14 +1,12 @@
-import { useRef, useState } from "react"
+import { useRef } from "react"
 import { useNavigate, useParams } from "react-router-dom";
-import Stomp from 'stompjs';
 import useWebSocket from "../hooks/useWebSocket";
 
 
 const JoinGuest = () => {
     const navigate = useNavigate()
     const { id } = useParams()
-    const {userJoin, subscribeToPing} = useWebSocket()
-    const [stompClient, setStompClient] = useState<Stomp.Client>()
+    const {userJoin} = useWebSocket()
 
     const userNameRef = useRef<HTMLInputElement>(null);
 
@@ -16,8 +14,7 @@ const JoinGuest = () => {
         const username = userNameRef.current?.value;
         if (username && username.trim()) {
             localStorage.setItem("guestUsername", username)
-            userJoin(username, id || '', false, setStompClient)
-            subscribeToPing(stompClient!, username, id!)
+            userJoin(username, id || '', false)
             navigate(`/room/${id}`)
         }
     }

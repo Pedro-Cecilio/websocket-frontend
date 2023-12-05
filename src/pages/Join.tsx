@@ -1,22 +1,18 @@
-import { useRef, useState } from "react"
+import { useRef } from "react"
 import { useNavigate } from "react-router-dom";
 import { generateUuid } from '../utils/generateUuid';
 import useWebSocket from "../hooks/useWebSocket";
-import Stomp from 'stompjs';
 
 const Join = () => {
     const userNameRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate()
-    const { userJoin, subscribeToPing } = useWebSocket()
-    const [stompClient, setStompClient] = useState<Stomp.Client>()
-
+    const { userJoin } = useWebSocket()
     const handleSubmit = () => {
         const username = userNameRef.current?.value;
 
         if (username && username.trim()) {
             const uuid = generateUuid();
-            userJoin(username, uuid, true, setStompClient)
-            subscribeToPing(stompClient!, username, uuid!)
+            userJoin(username, uuid, true)
             navigate(`configRoom/${uuid}`)
         }
     }
