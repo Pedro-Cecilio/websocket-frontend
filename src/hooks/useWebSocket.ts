@@ -31,7 +31,7 @@ const useWebSocket = (): WebSocketResponse => {
         return stompClient;
     };
 
-    const userJoin = (username: string, uuid: string, isHost: boolean): any => {
+    const userJoin = (username: string, uuid: string, isHost: boolean): void => {
         const userData: UserData = {
             username,
             host: isHost,
